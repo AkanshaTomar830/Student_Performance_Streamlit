@@ -2,92 +2,75 @@ import warnings
 warnings.filterwarnings("ignore")
 
 import streamlit as st
-from src.ml_pipeline import StudentPredictor
-from src.ui_components import (
-    apply_custom_styles,
+
+# Import the 3 modules corresponding to the 3 team members
+from modules.member1_data_analysis import render_data_analysis_tab
+from modules.member2_ml_models import render_model_evaluation_tab
+from modules.member3_ui_views import (
+    apply_styles,
     render_sidebar,
-    render_prediction_view,
-    render_analytics_view,
-    render_models_view,
-    render_simulation_view
+    render_prediction_tab,
+    render_simulation_tab
 )
 
 # ---------------------------------------------------------
-# Page Configuration
+# Page Setup
 # ---------------------------------------------------------
 st.set_page_config(
-    page_title="EduPredict AI | Student Performance Analytics",
-    page_icon=None,
+    page_title="Student Performance Predictor",
     layout="wide",
     initial_sidebar_state="expanded"
 )
 
-# Apply CSS Styling (Member 3)
-apply_custom_styles()
-
-# ---------------------------------------------------------
-# Initialize Prediction Engine (Member 2)
-# ---------------------------------------------------------
-@st.cache_resource
-def get_predictor():
-    return StudentPredictor()
-
-try:
-    predictor = get_predictor()
-except Exception as e:
-    st.error(f"Failed to initialize machine learning model: {e}")
-    st.stop()
-
-# ---------------------------------------------------------
-# Sidebar Controls & Team Attribution (Member 3)
-# ---------------------------------------------------------
+# Apply Clean Styling & Sidebar (Member 3)
+apply_styles()
 sidebar_state = render_sidebar()
 
 # ---------------------------------------------------------
-# Hero Banner Header
+# Dashboard Title Banner
 # ---------------------------------------------------------
 st.markdown("""
 <div class="hero-container">
     <div class="hero-title">
-        Student Academic Performance & Risk Dashboard
+        Student Performance Prediction Dashboard
     </div>
     <div class="hero-subtitle">
-        An AI-powered academic decision-support system to predict student outcomes, analyze cohort performance, benchmark machine learning models, and simulate habit interventions.
+        An AI-powered academic decision-support system to predict student outcomes, analyze cohort data, evaluate ML models, and simulate habit improvements.
     </div>
 </div>
 """, unsafe_allow_html=True)
 
 # ---------------------------------------------------------
-# Multi-Module Tab Navigation
+# 4 Main Feature Tabs
 # ---------------------------------------------------------
-tab_pred, tab_eda, tab_eval, tab_sim = st.tabs([
+tab1, tab2, tab3, tab4 = st.tabs([
     "Student Pass Predictor",
-    "Dataset Analytics & EDA",
-    "Model Evaluation & XAI",
+    "Data Analysis & Graphs",
+    "Model Evaluation & Results",
     "What-If Habit Simulator"
 ])
 
-# Tab 1: Live Inference & Student Risk Scoring
-with tab_pred:
-    current_student = render_prediction_view(predictor, sidebar_state)
+# Tab 1: Live Student Predictor (Member 3)
+with tab1:
+    current_student = render_prediction_tab(sidebar_state)
 
-# Tab 2: Member 1's Dataset Analysis, Statistics & EDA
-with tab_eda:
-    render_analytics_view()
+# Tab 2: Dataset Analysis & Visualizations (Member 1)
+with tab2:
+    render_data_analysis_tab()
 
-# Tab 3: Member 2's ML Model Evaluation, Confusion Matrix & Benchmarking
-with tab_eval:
-    render_models_view(predictor)
+# Tab 3: ML Model Evaluation & Benchmarks (Member 2)
+with tab3:
+    render_model_evaluation_tab()
 
-# Tab 4: Interactive What-If Habit & Attendance Sensitivity Simulator
-with tab_sim:
-    render_simulation_view(predictor, current_student)
+# Tab 4: What-If Habit Simulator (Member 3)
+with tab4:
+    render_simulation_tab(current_student)
 
 # ---------------------------------------------------------
 # Footer
 # ---------------------------------------------------------
 st.divider()
 st.caption(
-    "EduPredict AI Dashboard · Project-Based Learning (PBL) Collaboration · "
-    "Modular architecture dividing Data Analytics (Member 1), ML Pipeline (Member 2), and Frontend UI (Member 3)."
+    "Student Performance Predictor · Built for Project-Based Learning (PBL) · "
+    "Divided into 3 Modules: Data Analysis (Member 1), ML Models (Member 2), and UI Dashboard (Member 3)."
 )

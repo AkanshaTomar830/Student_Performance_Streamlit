@@ -1,125 +1,72 @@
-# EduPredict AI — Student Performance Prediction & Analytics Dashboard
+# Student Performance Prediction & Risk Dashboard
 
-An end-to-end, modular Machine Learning decision-support system built with **Streamlit** and a **Random Forest Classifier** trained on the UCI Student Performance Dataset.
+An AI-powered academic decision-support platform built using **Streamlit** and a **Random Forest Classifier** trained on the UCI Student Performance benchmark dataset.
 
-The platform helps educators, academic advisors, and students assess course performance, identify at-risk students before final examinations, explore data trends, compare machine learning algorithms, and simulate habit improvements.
-
----
-
-## Team Work Breakdown (3-Member Modular Architecture)
-
-This project has been modularized into 3 independent components, enabling 3 team members to develop and defend their contributions separately:
-
-```
-┌────────────────────────────────────────────────────────────────────────────────────────┐
-│                                   EduPredict AI                                        │
-├──────────────────────────┬─────────────────────────────┬───────────────────────────────┤
-│        MEMBER 1          │          MEMBER 2           │           MEMBER 3            │
-│  Data Analytics & EDA    │    ML Pipeline & Models     │      Dashboard & UI/UX        │
-├──────────────────────────┼─────────────────────────────┼───────────────────────────────┤
-│ • Dataset ingestion      │ • Production predictor      │ • Main Streamlit orchestrator │
-│ • Data preprocessing     │ • Model performance metrics │ • Custom CSS styling & themes │
-│ • Feature correlation    │ • Confusion matrix analysis │ • Sidebar controls & personas │
-│ • Interactive charts     │ • 5-fold cross-validation   │ • Multi-tab view integration  │
-│ • EDA cohort insights    │ • Feature importance (XAI)  │ • Report export & downloads   │
-└──────────────────────────┴─────────────────────────────┴───────────────────────────────┘
-```
-
-### Member 1: Dataset Analysis, Preprocessing & Visualizations
-* **Directory:** `src/data_analytics/`
-* **Modules:**
-  * `loader.py`: Ingestion of benchmark dataset (`data/student-mat.csv`), missing value validation, and cohort metrics.
-  * `preprocessing.py`: Feature selection, binary classification labeling ($G_3 \ge 10$), and correlation calculations.
-  * `visualizations.py`: Exploratory Data Analysis (EDA) charts including cohort pass/fail distribution, grade histograms across $G_1, G_2, G_3$, study hours impact, and correlation heatmaps.
-* **Dashboard Tab:** **Dataset Analytics & EDA**
-
-### Member 2: Machine Learning Models, Evaluation & Prediction
-* **Directory:** `src/ml_pipeline/`
-* **Modules:**
-  * `predictor.py`: Production inference engine using the trained Random Forest ensemble (`Models/student_prediction_app_model.pkl`), probability confidence scoring, and risk classification.
-  * `evaluator.py`: Quantitative model evaluation (Confusion Matrix: 121 TN, 251 TP, 14 FP, 9 FN; Accuracy: 94.18%, Precision: 97.29%, F1 Score: 95.98%) and 5-fold cross-validation benchmarking against Decision Trees and Logistic Regression.
-  * `explainability.py`: Explainable AI (XAI) feature importances ($G_2$: 58.3%, $G_1$: 28.8%, past failures: 5.9%, absences: 5.3%, study time: 1.7%).
-* **Dashboard Tab:** **Model Evaluation & XAI**
-
-### Member 3: Dashboard Design, Frontend & System Integration
-* **Directory:** `src/ui_components/` and `app.py`
-* **Modules:**
-  * `styles.py`: Clean CSS themes, responsive hero banners, and KPI metric card components.
-  * `sidebar.py`: Quick-load student personas (*Top Student*, *Average Student*, *Struggling Student*, *Comeback Student*, *Attendance Risk Student*), student identifiers, and team credits.
-  * `views/view_prediction.py`: Interactive assessment form, visual outcome probability bar, and downloadable evaluation report (.txt).
-  * `views/view_simulation.py`: What-If Sensitivity Simulator modeling real-time gains from increasing study hours or decreasing absences.
-  * `app.py`: Main application orchestrator uniting Member 1, Member 2, and Member 3 into a single responsive portal.
-* **Dashboard Tabs:** **Student Pass Predictor** & **What-If Habit Simulator**
+The system predicts final exam outcomes (Pass vs. Fail), visualizes student data distributions, benchmarks machine learning algorithms, and simulates how study habits and attendance influence passing chances.
 
 ---
 
-## Project Structure
+## 3-Member Clean Modular Structure
+
+To make collaboration simple and organized, the code is cleanly divided into **3 dedicated files** inside the `modules/` folder:
 
 ```text
 Student_Performance_Streamlit/
 │
-├── data/                                 # [Member 1] Dataset Storage
-│   ├── student-mat.csv                   # Mathematics course records (395 students)
-│   └── student-por.csv                   # Portuguese language records (649 students)
+├── data/
+│   ├── student-mat.csv               # Mathematics course dataset (395 students)
+│   └── student-por.csv               # Portuguese language dataset (649 students)
 │
-├── src/                                  # Modular Source Code
-│   ├── __init__.py
-│   │
-│   ├── data_analytics/                   # [Member 1 Ownership]
-│   │   ├── __init__.py
-│   │   ├── loader.py                     # Data loading & summary statistics
-│   │   ├── preprocessing.py              # Feature extraction & correlation matrix
-│   │   └── visualizations.py             # Altair EDA charts & distribution plots
-│   │
-│   ├── ml_pipeline/                      # [Member 2 Ownership]
-│   │   ├── __init__.py
-│   │   ├── predictor.py                  # Production inference & scenario engine
-│   │   ├── evaluator.py                  # Confusion matrix & model benchmarking
-│   │   └── explainability.py             # Feature importance analysis (XAI)
-│   │
-│   └── ui_components/                    # [Member 3 Ownership]
-│       ├── __init__.py
-│       ├── styles.py                     # CSS styling & responsive card themes
-│       ├── sidebar.py                    # Sidebar controls & persona presets
-│       └── views/                        # Feature view components
-│           ├── __init__.py
-│           ├── view_prediction.py        # Tab 1: Live Student Predictor
-│           ├── view_analytics.py         # Tab 2: Dataset Analytics & EDA
-│           ├── view_models.py            # Tab 3: Model Evaluation & XAI
-│           └── view_simulation.py        # Tab 4: What-If Habit Simulator
+├── Models/
+│   ├── app_features.pkl              # Feature vector definition
+│   └── student_prediction_app_model.pkl # Trained Random Forest Classifier
 │
-├── Models/                               # Production Model Artifacts
-│   ├── app_features.pkl                  # Feature vector definition
-│   └── student_prediction_app_model.pkl  # Trained Random Forest Classifier
+├── modules/
+│   ├── member1_data_analysis.py      # [MEMBER 1] Data loading, preprocessing & EDA charts
+│   ├── member2_ml_models.py          # [MEMBER 2] ML prediction, model evaluation & benchmarks
+│   └── member3_ui_views.py           # [MEMBER 3] Streamlit UI, styling & What-If simulator
 │
-├── .vscode/
-│   └── launch.json                      # One-click VS Code Run & Debug configuration
-├── app.py                               # Main Streamlit Orchestrator
-├── requirements.txt                     # Dependencies
-└── README.md                            # Documentation
+├── app.py                            # Main Streamlit app uniting all 3 modules
+├── Student_Performance_Prediction.ipynb # Jupyter Notebook for model training & experiments
+├── requirements.txt                  # Python package dependencies
+├── README.md                         # Documentation
+└── .gitignore                        # Git ignore rules
 ```
 
 ---
 
-## Machine Learning Benchmark Results
+## Team Roles & Ownership
 
-Evaluated on the UCI Student Performance benchmark dataset:
+### Member 1: Dataset Analysis, Preprocessing & Visualizations
+* **File:** `modules/member1_data_analysis.py`
+* **Responsibilities:**
+  * Loads and cleans the UCI dataset (`data/student-mat.csv`).
+  * Computes cohort statistics (pass rate, average marks, absences).
+  * Generates interactive charts: Pass vs. Fail ratio, exam score distributions ($G_1, G_2, G_3$), study hours impact, and correlation heatmap.
+* **Dashboard Tab:** **Data Analysis & Graphs**
 
-| Model | 5-Fold CV Accuracy | 5-Fold CV F1 Score | Test Set Accuracy |
-| :--- | :---: | :---: | :---: |
-| **Random Forest (Champion)** | **90.38%** | **93.18%** | **94.18%** |
-| **Logistic Regression** | 90.38% | 93.07% | 91.90% |
-| **Decision Tree** | 86.84% | 90.41% | 91.39% |
+### Member 2: Machine Learning Models, Evaluation & Prediction
+* **File:** `modules/member2_ml_models.py`
+* **Responsibilities:**
+  * Model inference using the Random Forest classifier (`Models/student_prediction_app_model.pkl`).
+  * Computes quantitative evaluation metrics (Accuracy: **94.18%**, Precision: **97.29%**, Recall: **94.72%**, F1: **95.98%**).
+  * Real Confusion Matrix: 121 TN, 251 TP, 14 FP, 9 FN.
+  * 5-Fold Cross-Validation benchmark against Decision Tree (86.84%) and Logistic Regression (90.38%).
+  * Feature importance analysis ($G_2$: 58.3%, $G_1$: 28.8%, past failures: 5.9%, absences: 5.3%, study time: 1.7%).
+* **Dashboard Tab:** **Model Evaluation & Results**
 
-### Confusion Matrix (Random Forest):
-* **True Negatives (Correctly predicted Fail):** 121
-* **True Positives (Correctly predicted Pass):** 251
-* **False Positives (Incorrectly predicted Pass):** 14
-* **False Negatives (Incorrectly predicted Fail):** 9
+### Member 3: Dashboard Design, Frontend & Integration
+* **File:** `modules/member3_ui_views.py` and `app.py`
+* **Responsibilities:**
+  * Main application flow and custom CSS styling.
+  * Sidebar navigation with preset student personas (*Top Student*, *Average Student*, *Struggling Student*, *Comeback Student*, *Attendance Risk Student*).
+  * Tab 1: Live student assessment form, KPI metric cards, and 1-click report generator (.txt).
+  * Tab 4: Interactive What-If Habit Sensitivity Simulator.
+* **Dashboard Tabs:** **Student Pass Predictor** & **What-If Habit Simulator**
 
 ---
 
-## Installation & Running
+## Running the Application
 
 ### 1. Clone the Repository
 ```bash
@@ -132,13 +79,13 @@ cd Student_Performance_Streamlit
 pip install -r requirements.txt
 ```
 
-### 3. Run the Dashboard
+### 3. Run with Streamlit
 ```bash
 python -m streamlit run app.py
 ```
-The application will launch in your browser at `http://localhost:8501`.
+Open `http://localhost:8501` in your browser.
 
 ---
 
-## License & Credits
-Developed as an academic Project-Based Learning (PBL) collaboration utilizing the **UCI Student Performance Dataset** (Cortez & Silva, 2008).
+## License & Dataset Source
+Trained on the **UCI Student Performance Dataset** (Cortez & Silva, 2008) for academic Project-Based Learning (PBL) demonstration.
